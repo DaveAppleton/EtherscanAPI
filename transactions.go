@@ -65,7 +65,7 @@ func (a *API) TransactionsByAddress(addr string) (tr TxListRec) {
 // (To get paginated results use page=<page number> and offset=<max records to return>)
 // https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x2c1ba59d6f58433fb1eaee7d20b26ed83bda51a3&startblock=0&endblock=2702578&page=1&offset=10&sort=asc&apikey=YourApiKeyToken
 
-func (a *API) internalTransactionsByAddress(addr string) (tr TxListRec) {
+func (a *API) InternalTransactionsByAddress(addr string) (tr TxListRec) {
 	call := "http://api.etherscan.io/api?module=account&action=txlistinternal&address=" + addr + "&startblock=0&endblock=2702578&sort=asc&apikey=" + a.apiKey
 	fmt.Println(call)
 	resp, err := http.Get(call)
