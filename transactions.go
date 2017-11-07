@@ -17,6 +17,7 @@ type TxListItem struct {
 	IsError           string `json:"isError"`
 	GasUsed           string `json:"gasUsed"`
 	CumulativeGasUsed string `json:"cumulativeGasUsed"`
+	ContractAddress   string `json:"contractAddress"`
 	Input             string `json:"input"`
 }
 
@@ -38,21 +39,23 @@ type TxListRec struct {
 // (To get paginated results use page=<page number> and offset=<max records to return>)
 // https://api.etherscan.io/api?module=account&action=txlist&address=0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=YourApiKeyToken
 func (a *API) TransactionsByAddress(addr string) (tr TxListRec) {
-	//var tr txListRec
-	call := "http://api.etherscan.io/api?module=account&action=txlist&startblock=0&endblock=99999999&sort=asc" + "&address=" + addr + "&tag=latest&apikey=" + a.apiKey
-	fmt.Println(call)
-	resp, err := http.Get(call)
-	if err != nil {
-		fmt.Println(err)
-		return TxListRec{Status: "NOTOK", Message: err.Error()}
-	}
-	err = json.NewDecoder(resp.Body).Decode(&tr)
-	if err != nil {
-		fmt.Println(err)
-		//http.Error(w, err.Error(), 400)
-		return TxListRec{Status: "NOTOK", Message: err.Error()}
-	}
-	return
+	// //var tr txListRec
+	// call := "http://api.etherscan.io/api?module=account&action=txlist&startblock=0&endblock=99999999&sort=asc" + "&address=" + addr + "&tag=latest&apikey=" + a.apiKey
+	// fmt.Println(call)
+	// resp, err := http.Get(call)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return TxListRec{Status: "NOTOK", Message: err.Error()}
+	// }
+	// err = json.NewDecoder(resp.Body).Decode(&tr)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	//http.Error(w, err.Error(), 400)
+	// 	return TxListRec{Status: "NOTOK", Message: err.Error()}
+	// }
+	// return
+	return a.AccountTransactions("txlist", "address", addr, "0", "4508188", "asc")
+
 }
 
 // Get a list of 'Internal' Transactions by Address
@@ -66,8 +69,28 @@ func (a *API) TransactionsByAddress(addr string) (tr TxListRec) {
 // https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x2c1ba59d6f58433fb1eaee7d20b26ed83bda51a3&startblock=0&endblock=2702578&page=1&offset=10&sort=asc&apikey=YourApiKeyToken
 
 func (a *API) InternalTransactionsByAddress(addr string) (tr TxListRec) {
-	call := "http://api.etherscan.io/api?module=account&action=txlistinternal&address=" + addr + "&startblock=0&endblock=2702578&sort=asc&apikey=" + a.apiKey
-	fmt.Println(call)
+	// call := "http://api.etherscan.io/api?module=account&action=txlistinternal&address=" + addr + "&startblock=0&endblock=2702578&sort=asc&apikey=" + a.apiKey
+	// fmt.Println(call)
+	// resp, err := http.Get(call)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return TxListRec{Status: "NOTOK", Message: err.Error()}
+	// }
+	// err = json.NewDecoder(resp.Body).Decode(&tr)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	//http.Error(w, err.Error(), 400)
+	// 	return TxListRec{Status: "NOTOK", Message: err.Error()}
+	// }
+	return a.AccountTransactions("txlistinternal", "address", addr, "0", "2702578", "asc")
+}
+
+// Really need to improve the way we call this.
+func (a *API) AccountTransactions(action string, by string, val string, start string, end string, sort string) (tr TxListRec) {
+	call := "http://api.etherscan.io/api?module=account&action=" +
+		action + "&" + by + "=" + val + "&startblock=" + start +
+		"&endblock=" + end + "&sort=" + sort + "&apikey=" + a.apiKey
+	//fmt.Println(call)
 	resp, err := http.Get(call)
 	if err != nil {
 		fmt.Println(err)
@@ -80,6 +103,7 @@ func (a *API) InternalTransactionsByAddress(addr string) (tr TxListRec) {
 		return TxListRec{Status: "NOTOK", Message: err.Error()}
 	}
 	return
+
 }
 
 // Get "Internal Transactions" by Transaction Hash
