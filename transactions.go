@@ -1,5 +1,20 @@
 package etherscanAPI
 
+/******************************************************************
+Copyright 2018 David Appleton
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+******************************************************************/
 import (
 	"encoding/json"
 	"fmt"
@@ -54,8 +69,18 @@ func (a *API) TransactionsByAddress(addr string) (tr TxListRec) {
 	// 	return TxListRec{Status: "NOTOK", Message: err.Error()}
 	// }
 	// return
-	return a.AccountTransactions("txlist", "address", addr, "0", "4508188", "asc")
+	return a.AccountTransactions("txlist", "address", addr, "0", "99999999", "asc")
+}
 
+// TransactionsByAddressFromTo - return transactions in specified address range. empty string to use default
+func (a *API) TransactionsByAddressFromTo(addr string, from string, to string) (tr TxListRec) {
+	if len(from) == 0 {
+		from = "0"
+	}
+	if len(to) == 0 {
+		to = "99999999"
+	}
+	return a.AccountTransactions("txlist", "address", addr, from, to, "asc")
 }
 
 // Get a list of 'Internal' Transactions by Address

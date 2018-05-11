@@ -1,5 +1,21 @@
 package etherscanAPI
 
+/******************************************************************
+Copyright 2017 David Appleton
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+******************************************************************/
+
 import (
 	"encoding/json"
 	"fmt"
@@ -85,4 +101,27 @@ func (a *API) EstimateGas(to string, value string) (res IntRec) {
 	}
 	return
 
+}
+
+func (a *API) EthCall(to string, data string) (res StringRec) {
+	var sr StringRec
+	call := "http://api.etherscan.io/api?module=proxy&action=eth_call&to="
+	call += to
+	call += "&data="
+	call += data
+	call += "&tag=latest&apikey="
+	call += a.apiKey
+	//fmt.Println(call)
+	resp, err := http.Get(call)
+	if err != nil {
+		fmt.Println(err)
+		return StringRec{Status: "NOTOK", Message: err.Error()}
+	}
+	err = json.NewDecoder(resp.Body).Decode(&sr)
+	if err != nil {
+		fmt.Println(err)
+		//http.Error(w, err.Error(), 400)
+		return StringRec{Status: "NOTOK", Message: err.Error()}
+	}
+	return sr
 }
