@@ -1,7 +1,7 @@
 package etherscanAPI
 
 /******************************************************************
-Copyright 2018 David Appleton
+Copyright 2017 David Appleton
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
