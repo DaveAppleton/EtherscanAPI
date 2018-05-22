@@ -36,7 +36,7 @@ func GetSourceCode(address string, chain string) (code string, err error) {
 	return
 }
 
-// GetSourceCode returns the code section
+// GetABI returns the public ABI
 func GetABI(address string, chain string) (abi string, err error) {
 	query, err := getPageQuery(address, chain)
 	if err != nil {
@@ -49,6 +49,7 @@ func GetABI(address string, chain string) (abi string, err error) {
 	return
 }
 
+// GetVersion - return the version
 func GetVersion(address string, chain string) (version string, err error) {
 	query, err := getPageQuery(address, chain)
 	if err != nil {
@@ -70,6 +71,7 @@ func GetVersion(address string, chain string) (version string, err error) {
 	return
 }
 
+// GetOptimisation - find out if the code was optimised
 func GetOptimisation(address string, chain string) (optimisation bool, err error) {
 	query, err := getPageQuery(address, chain)
 	if err != nil {
@@ -88,7 +90,7 @@ func GetOptimisation(address string, chain string) (optimisation bool, err error
 	return
 }
 
-// GetSourceCode returns the code section
+// GetSWARM returns the swarm address
 func GetSWARM(address string, chain string) (swarm string, err error) {
 	query, err := getPageQuery(address, chain)
 	if err != nil {
